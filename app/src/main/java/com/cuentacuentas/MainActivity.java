@@ -1,5 +1,7 @@
 package com.cuentacuentas;
 
+import static com.cuentacuentas.RandomStringGenerator.generateRandomString;
+
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -20,5 +22,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        String cuenta = generateRandomString();
     }
 }
