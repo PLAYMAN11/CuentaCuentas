@@ -1,5 +1,7 @@
 package com.cuentacuentas;
 
+import static com.cuentacuentas.RandomString.randomString;
+
 import android.os.Bundle;
 import android.util.Log;
 
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         USUARIO.put("Valor","VALOR_PRODUCTO_AQUI");
         
         //VARIABLE ALEATORIO;
-
+        String aleatorio = randomString();
 
         db.collection("*VARIABLE VALOR ALEATORIO AQUI*")
                 .add(USUARIO)
