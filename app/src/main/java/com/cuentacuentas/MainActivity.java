@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         USUARIO.put("Valor","VALOR_PRODUCTO_AQUI");
         
         //VARIABLE ALEATORIO;
+
+
         db.collection("*VARIABLE VALOR ALEATORIO AQUI*")
                 .add(USUARIO)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
