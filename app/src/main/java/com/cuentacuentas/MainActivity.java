@@ -4,30 +4,28 @@ import static com.cuentacuentas.RandomString.randomString;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
-import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
-
-
+    private String Nombre;
+    private String Codigo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -35,29 +33,42 @@ public class MainActivity extends AppCompatActivity {
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-        Map<String, Object> USUARIO = new HashMap<>();
-        USUARIO.put("Nombre","VARIABLE_NOMBRE_AQUI");
-        USUARIO.put("Producto","VALOR_PRODUCTO_AQUI");
-        USUARIO.put("Valor","VALOR_PRODUCTO_AQUI");
-        
-        //VARIABLE ALEATORIO;
+        Button crearMesa = findViewById(R.id.CrearCuenta);
+        Button unirseCuenta = findViewById(R.id.UnirseCuenta);
         String aleatorio = randomString();
 
-        db.collection("*VARIABLE VALOR ALEATORIO AQUI*")
-                .add(USUARIO)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Firestore", "Error adding document", e);
-                    }
-                });
+        // Método para crear mesa
+        crearMesa.setOnClickListener(v -> {
+            db.collection(aleatorio)
+                    .add(new HashMap<>())
+                    .addOnSuccessListener(documentReference ->
+                            Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId())
+                    )
+                    .addOnFailureListener(e ->
+                            Log.w("Firestore", "Error adding document", e)
+                    );
+
+            Codigo = aleatorio;
+            setContentView(R.layout.tu_codigo);
+            TextView textViewCodigo = findViewById(R.id.tucodigo);
+            textViewCodigo.setText(Codigo);
+        });
+
+
+        unirseCuenta.setOnClickListener(v -> {
+            setContentView(R.layout.unirse_mesa);
+        });
+    }
+
+    private void setNombre() {
+        Button ingresarNombre = findViewById(R.id.IngresarNombre);
+        ingresarNombre.setOnClickListener(v -> {
+            EditText name = findViewById(R.id.Nombre);
+            Nombre = name.getText().toString();
+        });
+    }
+
+    public String getCodigo() {
+        return Codigo;
     }
 }

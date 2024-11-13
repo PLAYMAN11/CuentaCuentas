@@ -19,9 +19,9 @@
         app:layout_constraintVertical_bias="0.219" />
 
     <EditText
-        android:id="@+id/editText_product"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/Precio"
+        android:layout_width="308dp"
+        android:layout_height="56dp"
         android:ems="10"
         android:inputType="text"
         android:text="Precio"
@@ -32,9 +32,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText_costoProduct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/Producto"
+        android:layout_width="326dp"
+        android:layout_height="52dp"
         android:ems="10"
         android:inputType="text"
         android:text="Producto"
@@ -47,9 +47,13 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="140dp"
+        android:layout_height="62dp"
         android:text="Button"
-        tools:layout_editor_absoluteX="150dp"
-        tools:layout_editor_absoluteY="441dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Precio"
+        app:layout_constraintVertical_bias="0.25" />
 </androidx.constraintlayout.widget.ConstraintLayout>
