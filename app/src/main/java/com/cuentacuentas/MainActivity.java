@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void Paso4() {
         // Verificar si la vista ya está cargada, y solo actualizar los elementos necesarios.
+        setContentView(R.layout.total_ind);
         TextView holanombre = findViewById(R.id.hola_nombre);
         holanombre.setText("Hola, " + Nombre);
 
