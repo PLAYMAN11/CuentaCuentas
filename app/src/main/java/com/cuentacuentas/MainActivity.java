@@ -79,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
             textViewCodigo.setText(Codigo);
 
             Button compartir_a_ingresar = findViewById(R.id.compartir_a_ingresar);
-            // Add any necessary listener code here if needed
+            compartir_a_ingresar.setOnClickListener(view -> {
+                    Paso3();
+            });
         });
     }
 
@@ -99,12 +101,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Paso4() {
-        setContentView(R.layout.total_ind);
+        // Verificar si la vista ya está cargada, y solo actualizar los elementos necesarios.
         TextView holanombre = findViewById(R.id.hola_nombre);
         holanombre.setText("Hola, " + Nombre);
 
         db.collection(Codigo)
-                .whereEqualTo("Nombre", Nombre)  // Replaced 'nombreEspecifico' with 'Nombre'
+                .whereEqualTo("Nombre", Nombre)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -128,27 +130,31 @@ public class MainActivity extends AppCompatActivity {
 
         // Agregar producto
         Button Agregar = findViewById(R.id.añadir_prod);
-        Agregar.setOnClickListener(view -> {
-            setContentView(R.layout.ingresar_productos);
-            Button agregarproducto = findViewById(R.id.button);
-            agregarproducto.setOnClickListener(view1 -> {
-                EditText Producto = findViewById(R.id.Producto);
-                EditText Precio = findViewById(R.id.Precio);
+        Agregar.setOnClickListener(view -> AgregarProducto());
+    }
 
-                Map<String, Object> USUARIO = new HashMap<>();
-                USUARIO.put("Nombre", Nombre);
-                USUARIO.put("Producto", Producto.getText().toString());
-                USUARIO.put("Precio", Precio.getText().toString());
+    private void AgregarProducto() {
+        setContentView(R.layout.ingresar_productos);
+        Button agregarproducto = findViewById(R.id.button);
+        agregarproducto.setOnClickListener(view1 -> {
+            EditText Producto = findViewById(R.id.Producto);
+            EditText Precio = findViewById(R.id.Precio);
 
-                db.collection(Codigo)
-                        .add(USUARIO)
-                        .addOnSuccessListener(documentReference ->
-                                Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId()))
-                        .addOnFailureListener(e ->
-                                Log.w("Firestore", "Error adding document", e));
+            Map<String, Object> USUARIO = new HashMap<>();
+            USUARIO.put("Nombre", Nombre);
+            USUARIO.put("Producto", Producto.getText().toString());
+            USUARIO.put("Precio", Precio.getText().toString());
 
-                Paso4();  // After adding the product, go back to Paso4
-            });
+            db.collection(Codigo)
+                    .add(USUARIO)
+                    .addOnSuccessListener(documentReference ->
+                            Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId())
+                    )
+                    .addOnFailureListener(e ->
+                            Log.w("Firestore", "Error adding document", e));
+            Paso4();
         });
     }
+
+
 }
