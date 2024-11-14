@@ -2,8 +2,10 @@ package com.cuentacuentas;
 
 import static com.cuentacuentas.RandomString.randomString;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,8 +36,27 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Button crearMesa = findViewById(R.id.CrearCuenta);
-        Button unirseCuenta = findViewById(R.id.UnirseCuenta);
         String aleatorio = randomString();
+        Button B_UnirseCuenta = findViewById(R.id.UnirseCuenta);
+
+
+      
+      //Metodo para Unirse a una cuenta
+        B_UnirseCuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setContentView(R.layout.unirse_mesa);
+                Button Desp_codmesa=findViewById(R.id.Desp_codmesa);
+                Desp_codmesa.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setContentView(R.layout.solicitar_nombre);
+                    }
+                });
+
+            }
+    });
+
 
         // Método para crear mesa
         crearMesa.setOnClickListener(v -> {
