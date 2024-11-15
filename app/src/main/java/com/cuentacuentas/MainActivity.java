@@ -9,11 +9,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -23,7 +30,11 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private String Nombre;
     private String Codigo;
+    private RecyclerView resumen;
+    private Adap_card_consumo_total adapter;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private DatabaseReference dbReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
             Button compartir_a_ingresar = findViewById(R.id.compartir_a_ingresar);
             compartir_a_ingresar.setOnClickListener(view -> {
-                    Paso3();
+                Paso3();
             });
         });
     }
@@ -127,7 +138,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Terminar la sesión
         Button terminar = findViewById(R.id.button3);
-        terminar.setOnClickListener(view -> setContentView(R.layout.res_final_view));
+        terminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setContentView(R.layout.res_final_view);
+                mostrarinforme();
+            }
+        });
 
         // Agregar producto
         Button Agregar = findViewById(R.id.añadir_prod);
@@ -157,5 +174,58 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void mostrarinforme() {
+        setContentView(R.layout.res_final_view);
+
+
+        dbReference = FirebaseDatabase.getInstance().getReference(Codigo);
+
+        //Usuarios y sus costos
+        Map<String, Double> usuarios = new HashMap<>();
+
+
+        dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Itera sobre cada usuario en el nodo "usuarios"
+                for (DataSnapshot usuarioSnapshot : dataSnapshot.getChildren()) {
+                    // Obtiene el nombre y la edad de cada usuario
+
+
+                    String nombre_ind = usuarioSnapshot.child("nombre").getValue(String.class);
+                    Double precio_ind = Double.parseDouble(usuarioSnapshot.child("edad").getValue(String.class));
+
+                    if (nombre_ind != null && precio_ind != null) {
+                        Double sumaprecio = usuarios.getOrDefault(nombre_ind, 0.0);
+                        usuarios.put(nombre_ind, sumaprecio + precio_ind);
+                    }
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //Mostrar los resultados
+        resumen = findViewById(R.id.nombre_cantidad);
+        adapter = new Adap_card_consumo_total(usuarios);
+        resumen.setAdapter(adapter);
+
+
+        //Mostrar el total
+        TextView total = findViewById(R.id.cantidadPagar);
+        Double dinero = 0.0;
+        for (Map.Entry<String, Double> entry : usuarios.entrySet()) {
+            dinero = dinero + entry.getValue();
+        }
+        String lol = dinero.toString();
+        total.setText(lol);
+
+    }
 
 }
+

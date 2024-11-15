@@ -33,7 +33,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/nombre"
+                        android:id="@+id/nombre_res_final"
                         android:layout_width="match_parent"
                         android:layout_height="83dp"
                         android:gravity="center"
@@ -48,7 +48,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/Cantidad"
+                        android:id="@+id/Cantidad_res_final"
                         android:layout_width="match_parent"
                         android:layout_height="83dp"
                         android:gravity="center"
