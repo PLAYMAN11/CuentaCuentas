@@ -2,6 +2,7 @@ package com.cuentacuentas;
 
 import static com.cuentacuentas.RandomString.randomString;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private String Codigo;
     private RecyclerView resumen;
     private Adap_card_consumo_total adapter;
+    private GridLayoutManager glm;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DatabaseReference dbReference;
@@ -176,53 +179,38 @@ public class MainActivity extends AppCompatActivity {
     private void mostrarinforme() {
         setContentView(R.layout.res_final_view);
 
-        dbReference = FirebaseDatabase.getInstance().getReference(Codigo);
-
         // Usuarios y sus costos
         Map<String, Double> usuarios = new HashMap<>();
 
-        dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Double dinero = 0.0;
+        db.collection(Codigo)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot usuarioSnapshot : task.getResult()) {
+                            String nombre_ind = usuarioSnapshot.getString("Nombre");
+                            Double precio_ind = usuarioSnapshot.getDouble("Precio");
 
-                // Iterar sobre cada usuario en la referencia
-                for (DataSnapshot usuarioSnapshot : dataSnapshot.getChildren()) {
-                    String nombre_ind = usuarioSnapshot.child("Nombre").getValue(String.class);
-                    String precioString = usuarioSnapshot.child("Precio").getValue(String.class);
-
-                    // Manejar casos donde "Precio" puede ser nulo o no convertible
-                    Double precio_ind = 0.0;
-                    if (precioString != null) {
-                        try {
-                            precio_ind = Double.parseDouble(precioString);
-                        } catch (NumberFormatException e) {
-                            Log.w("mostrarinforme", "Precio inválido para: " + nombre_ind);
+                            if (nombre_ind != null && precio_ind != null) {
+                                Double sumaprecio = usuarios.getOrDefault(nombre_ind, 0.0);
+                                usuarios.put(nombre_ind, sumaprecio + precio_ind);
+                            }
                         }
+
+                        // Mostrar los resultados después de cargar los datos
+                        resumen = findViewById(R.id.nombre_cantidad);
+                        glm = new GridLayoutManager(this, 1); // 1 columna
+                        resumen.setLayoutManager(glm);
+                        adapter = new Adap_card_consumo_total(usuarios);
+                        resumen.setAdapter(adapter);
+
+                        // Mostrar el total
+                        TextView total = findViewById(R.id.cantidadPagar);
+                        Double dinero = usuarios.values().stream().mapToDouble(Double::doubleValue).sum();
+                        total.setText(""+dinero);
+                    } else {
+                        Log.w("Firestore", "Error al obtener documentos: ", task.getException());
                     }
-
-                    if (nombre_ind != null && precio_ind != null) {
-                        Double sumaprecio = usuarios.getOrDefault(nombre_ind, 0.0);
-                        usuarios.put(nombre_ind, sumaprecio + precio_ind);
-                        dinero += precio_ind;  // Sumar al total
-                    }
-                }
-
-                // Mostrar los resultados una vez que todos los datos han sido procesados
-                resumen = findViewById(R.id.nombre_cantidad);
-                adapter = new Adap_card_consumo_total(usuarios);
-                resumen.setAdapter(adapter);
-
-                // Mostrar el total
-                TextView total = findViewById(R.id.cantidadPagar);
-                total.setText(dinero.toString());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("mostrarinforme", "Error al acceder a la base de datos", error.toException());
-            }
-        });
+                });
     }
     }
 

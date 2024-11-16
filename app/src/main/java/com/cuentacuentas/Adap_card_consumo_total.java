@@ -18,8 +18,8 @@ import java.util.Map;
 
 public class Adap_card_consumo_total extends RecyclerView.Adapter<Adap_card_consumo_total.targetaViewholder>{
 
-    private Map<String, Double> usuarios;
-    private List<String> listaClaves;
+    private final Map<String, Double> usuarios;
+    private final List<String> listaClaves;
 
     public  Adap_card_consumo_total(Map<String, Double> usuarios){
         this.listaClaves=new ArrayList<>(usuarios.keySet());
@@ -32,16 +32,18 @@ public class Adap_card_consumo_total extends RecyclerView.Adapter<Adap_card_cons
     @Override
     public targetaViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.res_final_card,parent,false);
-        return  new targetaViewholder(view);
+        return new targetaViewholder(view);
     }
 
 
 
-    @SuppressLint("SetTextI18n")
+
     @Override
     public void onBindViewHolder(@NonNull Adap_card_consumo_total.targetaViewholder holder, int position) {
-        holder.nombre.setText(listaClaves.get(position));
-        holder.total.setText(usuarios.get(listaClaves.get(position)).toString());
+        String nombreUsuario = listaClaves.get(position);
+        Double totalUsuario = usuarios.getOrDefault(nombreUsuario, 0.0);
+        holder.nombre.setText(nombreUsuario);
+        holder.total.setText(""+totalUsuario);
     }
 
     @Override
@@ -49,14 +51,13 @@ public class Adap_card_consumo_total extends RecyclerView.Adapter<Adap_card_cons
         return usuarios.size();
     }
 
-    class targetaViewholder extends RecyclerView.ViewHolder{
+    static class targetaViewholder extends RecyclerView.ViewHolder{
 
         TextView nombre;
         TextView total;
 
         public targetaViewholder(View itemView){
             super(itemView);
-
             nombre=itemView.findViewById(R.id.nombre_res_final);
             total=itemView.findViewById(R.id.Cantidad_res_final);
         }
