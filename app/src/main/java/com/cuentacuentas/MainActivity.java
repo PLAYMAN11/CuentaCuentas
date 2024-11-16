@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private GridLayoutManager glm;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     private DatabaseReference dbReference;
 
     @Override
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void Paso3() {
         setContentView(R.layout.solicitar_nombre);
         Button ingresarNombre = findViewById(R.id.IngresarNombre);
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.total_ind);
         TextView holanombre = findViewById(R.id.hola_nombre);
         holanombre.setText("Hola, " + Nombre);
+
 
         db.collection(Codigo)
                 .get()
