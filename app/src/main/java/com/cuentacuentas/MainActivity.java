@@ -125,17 +125,23 @@ public class MainActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         double sumaPrecios = 0.0;
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Double precio = document.getDouble("Precio");
-                            if (precio != null) {
-                                sumaPrecios += precio;
+                            String nombreDocumento = document.getString("Nombre");
+                            if (nombreDocumento != null && nombreDocumento.equals(Nombre)) {
+                                Double precio = document.getDouble("Precio");
+                                if (precio != null) {
+                                    sumaPrecios += precio;
+                                }
                             }
                         }
+
+                        // Mostrar el total en el TextView
                         TextView total = findViewById(R.id.Total_ind);
                         total.setText("Total: " + sumaPrecios);
                     } else {
                         Log.w("Firestore", "Error al obtener documentos: ", task.getException());
                     }
                 });
+
 
 
         // Terminar la sesión
