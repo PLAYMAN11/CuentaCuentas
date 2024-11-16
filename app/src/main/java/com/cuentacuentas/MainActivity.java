@@ -26,7 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -117,11 +119,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Paso4() {
+        // Cambio a la vista de consumo individual
         setContentView(R.layout.total_ind);
+
+        // Muestra del nombre del usuario
         TextView holanombre = findViewById(R.id.hola_nombre);
         holanombre.setText("Hola, " + Nombre);
 
+        // Declaración de la forma con la cual mostrar los datos
+        RecyclerView recyclerView = findViewById(R.id.Prod_ind);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
+        // Declaración del lugar donde almacenar los datos
+        List<Producto> listaProductos = new ArrayList<>();
+
+        // Declaración y asignación del adaptador
+        ProductoAdapter productoAdapter = new ProductoAdapter(listaProductos);
+        recyclerView.setAdapter(productoAdapter);
+
+        // Consulta y alamcenamiento de los datos
         db.collection(Codigo)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -130,14 +146,18 @@ public class MainActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String nombreDocumento = document.getString("Nombre");
                             if (nombreDocumento != null && nombreDocumento.equals(Nombre)) {
+                                String producto = document.getString("Producto");
                                 Double precio = document.getDouble("Precio");
-                                if (precio != null) {
+                                if (producto != null && precio != null) {
+                                    listaProductos.add(new Producto(producto, precio));
                                     sumaPrecios += precio;
                                 }
                             }
                         }
+                        // Se renderiza de nuevo el recyclerView cuando se añaden productos
+                        productoAdapter.notifyDataSetChanged();
 
-                        // Mostrar el total en el TextView
+                        // Se muestra el total en el TextView
                         TextView total = findViewById(R.id.Total_ind);
                         total.setText("Total: " + sumaPrecios);
                     } else {
@@ -145,16 +165,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
-
         // Terminar la sesión
         Button terminar = findViewById(R.id.button3);
-        terminar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setContentView(R.layout.res_final_view);
-                mostrarinforme();
-            }
+        terminar.setOnClickListener(view -> {
+            setContentView(R.layout.res_final_view);
+            mostrarinforme();
         });
 
         // Agregar producto
