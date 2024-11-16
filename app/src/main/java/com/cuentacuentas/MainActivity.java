@@ -2,6 +2,7 @@ package com.cuentacuentas;
 
 import static com.cuentacuentas.RandomString.randomString;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,21 +10,37 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private String Nombre;
     private String Codigo;
+    private RecyclerView resumen;
+    private Adap_card_consumo_total adapter;
+    private GridLayoutManager glm;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private DatabaseReference dbReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +96,12 @@ public class MainActivity extends AppCompatActivity {
             textViewCodigo.setText(Codigo);
 
             Button compartir_a_ingresar = findViewById(R.id.compartir_a_ingresar);
-            // Add any necessary listener code here if needed
+            compartir_a_ingresar.setOnClickListener(view -> {
+                Paso3();
+            });
         });
     }
+
 
     private void Paso3() {
         setContentView(R.layout.solicitar_nombre);
@@ -99,22 +119,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Paso4() {
+        // Cambio a la vista de consumo individual
         setContentView(R.layout.total_ind);
+
+        // Muestra del nombre del usuario
         TextView holanombre = findViewById(R.id.hola_nombre);
         holanombre.setText("Hola, " + Nombre);
 
+        // Declaración de la forma con la cual mostrar los datos
+        RecyclerView recyclerView = findViewById(R.id.Prod_ind);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
+        // Declaración del lugar donde almacenar los datos
+        List<Producto> listaProductos = new ArrayList<>();
+
+        // Declaración y asignación del adaptador
+        ProductoAdapter productoAdapter = new ProductoAdapter(listaProductos);
+        recyclerView.setAdapter(productoAdapter);
+
+        // Consulta y alamcenamiento de los datos
         db.collection(Codigo)
-                .whereEqualTo("Nombre", Nombre)  // Replaced 'nombreEspecifico' with 'Nombre'
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         double sumaPrecios = 0.0;
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Double precio = document.getDouble("Precio");
-                            if (precio != null) {
-                                sumaPrecios += precio;
+                            String nombreDocumento = document.getString("Nombre");
+                            if (nombreDocumento != null && nombreDocumento.equals(Nombre)) {
+                                String producto = document.getString("Producto");
+                                Double precio = document.getDouble("Precio");
+                                if (producto != null && precio != null) {
+                                    listaProductos.add(new Producto(producto, precio));
+                                    sumaPrecios += precio;
+                                }
                             }
                         }
+                        // Se renderiza de nuevo el recyclerView cuando se añaden productos
+                        productoAdapter.notifyDataSetChanged();
+
+                        // Se muestra el total en el TextView
                         TextView total = findViewById(R.id.Total_ind);
                         total.setText("Total: " + sumaPrecios);
                     } else {
@@ -124,31 +167,75 @@ public class MainActivity extends AppCompatActivity {
 
         // Terminar la sesión
         Button terminar = findViewById(R.id.button3);
-        terminar.setOnClickListener(view -> setContentView(R.layout.res_final_view));
+        terminar.setOnClickListener(view -> {
+            setContentView(R.layout.res_final_view);
+            mostrarinforme();
+        });
 
         // Agregar producto
         Button Agregar = findViewById(R.id.añadir_prod);
-        Agregar.setOnClickListener(view -> {
-            setContentView(R.layout.ingresar_productos);
-            Button agregarproducto = findViewById(R.id.button);
-            agregarproducto.setOnClickListener(view1 -> {
-                EditText Producto = findViewById(R.id.Producto);
-                EditText Precio = findViewById(R.id.Precio);
+        Agregar.setOnClickListener(view -> AgregarProducto());
+    }
 
-                Map<String, Object> USUARIO = new HashMap<>();
-                USUARIO.put("Nombre", Nombre);
-                USUARIO.put("Producto", Producto.getText().toString());
-                USUARIO.put("Precio", Precio.getText().toString());
+    private void AgregarProducto() {
+        setContentView(R.layout.ingresar_productos);
+        Button agregarproducto = findViewById(R.id.button);
+        agregarproducto.setOnClickListener(view1 -> {
+            EditText Producto = findViewById(R.id.Producto);
+            EditText Precio = findViewById(R.id.Precio);
+            double precioValor = Double.parseDouble(Precio.getText().toString());
+            Map<String, Object> USUARIO = new HashMap<>();
+            USUARIO.put("Nombre", Nombre);
+            USUARIO.put("Producto", Producto.getText().toString());
+            USUARIO.put("Precio", precioValor);
 
-                db.collection(Codigo)
-                        .add(USUARIO)
-                        .addOnSuccessListener(documentReference ->
-                                Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId()))
-                        .addOnFailureListener(e ->
-                                Log.w("Firestore", "Error adding document", e));
-
-                Paso4();  // After adding the product, go back to Paso4
-            });
+            db.collection(Codigo)
+                    .add(USUARIO)
+                    .addOnSuccessListener(documentReference ->
+                            Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId())
+                    )
+                    .addOnFailureListener(e ->
+                            Log.w("Firestore", "Error adding document", e));
+            Paso4();
         });
     }
-}
+
+    private void mostrarinforme() {
+        setContentView(R.layout.res_final_view);
+
+        // Usuarios y sus costos
+        Map<String, Double> usuarios = new HashMap<>();
+
+        db.collection(Codigo)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot usuarioSnapshot : task.getResult()) {
+                            String nombre_ind = usuarioSnapshot.getString("Nombre");
+                            Double precio_ind = usuarioSnapshot.getDouble("Precio");
+
+                            if (nombre_ind != null && precio_ind != null) {
+                                Double sumaprecio = usuarios.getOrDefault(nombre_ind, 0.0);
+                                usuarios.put(nombre_ind, sumaprecio + precio_ind);
+                            }
+                        }
+
+                        // Mostrar los resultados después de cargar los datos
+                        resumen = findViewById(R.id.nombre_cantidad);
+                        glm = new GridLayoutManager(this, 1); // 1 columna
+                        resumen.setLayoutManager(glm);
+                        adapter = new Adap_card_consumo_total(usuarios);
+                        resumen.setAdapter(adapter);
+
+                        // Mostrar el total
+                        TextView total = findViewById(R.id.cantidadPagar);
+                        Double dinero = usuarios.values().stream().mapToDouble(Double::doubleValue).sum();
+                        total.setText(""+dinero);
+                    } else {
+                        Log.w("Firestore", "Error al obtener documentos: ", task.getException());
+                    }
+                });
+    }
+    }
+
+

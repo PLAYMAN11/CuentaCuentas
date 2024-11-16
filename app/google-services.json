@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "137536954762",
-    "project_id": "cuentacuentas-5eb05",
-    "storage_bucket": "cuentacuentas-5eb05.firebasestorage.app"
+    "project_number": "1067304434117",
+    "project_id": "cuentacuentas-d499f47e",
+    "storage_bucket": "cuentacuentas-d499f47e.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:137536954762:android:6c2765df446e81fe13a873",
+        "mobilesdk_app_id": "1:1067304434117:android:221a7ffd6d5cc1b643f3ac",
         "android_client_info": {
           "package_name": "com.cuentacuentas"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCxnKYZLTD2Sxl3ZE4xjtJX_6WtYTuuhsI"
+          "current_key": "AIzaSyCM7gSt29qSfbXYE4LjG9Fvnf295qLOggA"
         }
       ],
       "services": {
