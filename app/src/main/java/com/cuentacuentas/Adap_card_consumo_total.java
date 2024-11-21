@@ -43,7 +43,7 @@ public class Adap_card_consumo_total extends RecyclerView.Adapter<Adap_card_cons
         String nombreUsuario = listaClaves.get(position);
         Double totalUsuario = usuarios.getOrDefault(nombreUsuario, 0.0);
         holder.nombre.setText(nombreUsuario);
-        holder.total.setText(""+totalUsuario);
+        holder.total.setText("$"+totalUsuario);
     }
 
     @Override

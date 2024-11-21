@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Se muestra el total en el TextView
                         TextView total = findViewById(R.id.Total_ind);
-                        total.setText("Total: " + sumaPrecios);
+                        total.setText("Total: $" + sumaPrecios);
                     } else {
                         Log.w("Firestore", "Error al obtener documentos: ", task.getException());
                     }
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                         // Mostrar el total
                         TextView total = findViewById(R.id.cantidadPagar);
                         Double dinero = usuarios.values().stream().mapToDouble(Double::doubleValue).sum();
-                        total.setText(""+dinero);
+                        total.setText("$"+dinero);
                     } else {
                         Log.w("Firestore", "Error al obtener documentos: ", task.getException());
                     }
