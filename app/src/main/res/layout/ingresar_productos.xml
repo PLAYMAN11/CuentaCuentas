@@ -2,58 +2,79 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/cg2"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/Precio"
+        android:layout_width="250dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:fontFamily="@font/amiko"
+        android:gravity="center"
+        android:hint="Precio"
+        android:inputType="text"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.575" />
+
+    <EditText
+        android:id="@+id/Producto"
+        android:layout_width="250dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:fontFamily="@font/amiko"
+        android:gravity="center"
+        android:hint="Producto"
+        android:inputType="text"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.458" />
 
     <TextView
         android:id="@+id/hola_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar a tu cuenta"
-        android:textSize="20sp"
+        android:fontFamily="@font/amiko"
+        android:hint="Precio"
+        android:text="Agrega a tu cuenta"
+        android:textColor="#000000"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.534"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.219" />
-
-    <EditText
-        android:id="@+id/Precio"
-        android:layout_width="308dp"
-        android:layout_height="56dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Precio"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/Producto"
-        android:layout_width="326dp"
-        android:layout_height="52dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Producto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39" />
+        app:layout_constraintVertical_bias="0.361" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="140dp"
-        android:layout_height="62dp"
-        android:text="Button"
+        android:layout_width="170dp"
+        android:layout_height="77dp"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="@font/amiko"
+        android:text="Agregar"
+        android:textColor="#CA2D4A"
+        android:textSize="15sp"
+        android:translationZ="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Precio"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.962"
+        app:strokeColor="#ED8796"
+        app:strokeWidth="1dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

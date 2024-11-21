@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/cg3"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,38 +10,51 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ingresa tu nombre:"
+        android:fontFamily="@font/amiko"
+        android:text="Ingresa tu nombre"
         android:textAlignment="center"
-        android:textSize="32sp"
+        android:textColor="#000000"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.389" />
 
     <EditText
         android:id="@+id/Nombre"
-        android:layout_width="307dp"
+        android:layout_width="250dp"
         android:layout_height="52dp"
         android:ems="10"
+        android:fontFamily="@font/amiko"
+        android:hint="Nombre"
         android:inputType="text"
-        android:text="Nombre"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintVertical_bias="0.138" />
+        app:layout_constraintVertical_bias="0.093" />
 
     <Button
         android:id="@+id/IngresarNombre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
+        android:layout_width="170dp"
+        android:layout_height="77dp"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="@font/amiko"
+        android:text="Continuar"
+        android:textColor="#CA2D4A"
+        android:textSize="15sp"
+        android:translationZ="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.934"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Nombre"
-        app:layout_constraintVertical_bias="0.28" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.962"
+        app:strokeColor="#ED8796"
+        app:strokeWidth="1dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

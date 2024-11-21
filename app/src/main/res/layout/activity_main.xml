@@ -5,37 +5,59 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/custom_gradient_background"
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/UnirseCuenta"
-        android:layout_width="161dp"
-        android:layout_height="75dp"
-        android:text="Unir"
+        android:id="@+id/CrearCuenta"
+        android:layout_width="260dp"
+        android:layout_height="77dp"
+        android:backgroundTint="#FFFFFF"
+        android:elevation="20dp"
+        android:fontFamily="@font/amiko"
+        android:text="Crear mesa"
+        android:textColor="#CA2D4A"
+        android:textSize="16sp"
+        android:translationZ="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.564" />
+        app:layout_constraintVertical_bias="0.72"
+        app:strokeColor="#ED8796"
+        app:strokeWidth="1dp" />
 
     <Button
-        android:id="@+id/CrearCuenta"
-        android:layout_width="161dp"
-        android:layout_height="75dp"
-        android:text="Crear"
+        android:id="@+id/UnirseCuenta"
+        android:layout_width="260dp"
+        android:layout_height="77dp"
+        android:backgroundTint="@color/white"
+        android:fontFamily="@font/amiko"
+        android:text="Unirte"
+        android:textColor="#CA2D4A"
+        android:textSize="16sp"
+        android:translationZ="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintVertical_bias="0.877"
+        app:strokeColor="#ED8796"
+        app:strokeWidth="1dp"/>
 
     <TextView
         android:id="@+id/Titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CuentaCuentos"
+        android:fontFamily="@font/antic_didone"
+        android:text="CuentaCuentas"
+        android:textColor="#CA2D4A"
+        android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/CrearCuenta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.178" />
 </androidx.constraintlayout.widget.ConstraintLayout>
